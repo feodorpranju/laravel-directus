@@ -26,4 +26,6 @@ class Translation extends Model
     use HasFactory;
 
     protected $table = 'directus_translations';
+
+    protected $keyType = 'string';
 }

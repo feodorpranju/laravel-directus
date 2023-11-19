@@ -45,6 +45,8 @@ class Share extends Model
 
     protected $table = 'directus_shares';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

@@ -35,6 +35,8 @@ class Dashboard extends Model
 
     protected $table = 'directus_dashboards';
 
+    protected $keyType = 'string';
+
     /**
      * @return HasMany
      */

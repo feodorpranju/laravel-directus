@@ -45,6 +45,8 @@ class Flow extends Model
 
     protected $table = 'directus_flows';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

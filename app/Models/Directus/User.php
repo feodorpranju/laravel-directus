@@ -73,6 +73,8 @@ class User extends Model
 
     protected $table = 'directus_users';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

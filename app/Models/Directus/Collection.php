@@ -62,6 +62,8 @@ class Collection extends Model
 
     protected $primaryKey = 'collection';
 
+    protected $keyType = 'string';
+
     /**
      * @return HasMany
      */

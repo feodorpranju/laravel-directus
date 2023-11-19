@@ -22,4 +22,8 @@ class Extension extends Model
     use HasFactory;
 
     protected $table = 'directus_extensions';
+
+    protected $primaryKey = 'name';
+
+    protected $keyType = 'string';
 }

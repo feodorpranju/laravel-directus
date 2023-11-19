@@ -34,6 +34,10 @@ class Session extends Model
 
     protected $table = 'directus_sessions';
 
+    protected $primaryKey = 'token';
+
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

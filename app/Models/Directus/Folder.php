@@ -27,6 +27,8 @@ class Folder extends Model
 
     protected $table = 'directus_folders';
 
+    protected $keyType = 'string';
+
     /**
      * @return HasMany
      */

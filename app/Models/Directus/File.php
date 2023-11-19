@@ -62,6 +62,8 @@ class File extends Model
 
     protected $table = 'directus_files';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

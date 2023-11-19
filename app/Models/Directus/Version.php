@@ -41,6 +41,8 @@ class Version extends Model
 
     protected $table = 'directus_versions';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

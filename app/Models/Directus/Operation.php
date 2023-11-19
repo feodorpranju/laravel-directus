@@ -45,6 +45,8 @@ class Operation extends Model
 
     protected $table = 'directus_operations';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

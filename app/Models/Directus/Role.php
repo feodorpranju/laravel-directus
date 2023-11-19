@@ -36,6 +36,8 @@ class Role extends Model
 
     protected $table = 'directus_roles';
 
+    protected $keyType = 'string';
+
     /**
      * @return HasMany
      */

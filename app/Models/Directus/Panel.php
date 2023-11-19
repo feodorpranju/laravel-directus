@@ -50,6 +50,8 @@ class Panel extends Model
 
     protected $table = 'directus_panels';
 
+    protected $keyType = 'string';
+
     /**
      * @return BelongsTo
      */

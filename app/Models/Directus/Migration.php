@@ -24,4 +24,8 @@ class Migration extends Model
     use HasFactory;
 
     protected $table = 'directus_migrations';
+
+    protected $primaryKey = 'version';
+
+    protected $keyType = 'string';
 }
