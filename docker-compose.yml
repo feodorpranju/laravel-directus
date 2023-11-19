@@ -22,33 +22,32 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
+            - pgsql
             - redis
-            - meilisearch
-            - mailpit
-            - selenium
-    mysql:
-        image: 'mysql/mysql-server:8.0'
+            - directus
+    pgsql:
+        image: 'postgis/postgis:16-3.4'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ROOT_HOST: '%'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - 'sail-pgsql:/var/lib/postgresql/data'
+            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
             - sail
         healthcheck:
             test:
                 - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE}'
+                - '-U'
+                - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
     redis:
@@ -66,47 +65,39 @@ services:
                 - ping
             retries: 3
             timeout: 5s
-    meilisearch:
-        image: 'getmeili/meilisearch:latest'
+    directus:
+        image: 'directus/directus:10.8.1'
         ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+            - '${DIRECTUS_PORT:-8055}:8055'
+        volumes:
+            - './directus/uploads:/directus/uploads'
+            - './directus/extensions:/directus/extensions'
+            - './directus/database:/directus/database'
+        depends_on:
+            - redis
+            - pgsql
+        restart: always
         environment:
-            MEILI_NO_ANALYTICS: '${MEILISEARCH_NO_ANALYTICS:-false}'
-        volumes:
-            - 'sail-meilisearch:/meili_data'
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - wget
-                - '--no-verbose'
-                - '--spider'
-                - 'http://localhost:7700/health'
-            retries: 3
-            timeout: 5s
-    mailpit:
-        image: 'axllent/mailpit:latest'
-        ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
-        networks:
-            - sail
-    selenium:
-        image: selenium/standalone-chrome
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        volumes:
-            - '/dev/shm:/dev/shm'
+            KEY: 255d861b-5ea1-5996-9aa3-922530ec40b1
+            SECRET: 6116487b-cda1-52c2-b5b5-c8022c45e263
+            DB_CLIENT: pg
+            DB_HOST: pgsql
+            DB_PORT: '5432'
+            DB_DATABASE: '${DB_DATABASE}'
+            DB_USER: '${DB_USERNAME}'
+            DB_PASSWORD: '${DB_PASSWORD}'
+            CACHE_ENABLED: 'true'
+            CACHE_STORE: redis
+            REDIS: 'redis://redis:6379'
+            ADMIN_EMAIL: '${ADMIN_EMAIL}'
+            ADMIN_PASSWORD: '${ADMIN_PASSWORD}'
         networks:
             - sail
 networks:
     sail:
         driver: bridge
 volumes:
-    sail-mysql:
+    sail-pgsql:
         driver: local
     sail-redis:
-        driver: local
-    sail-meilisearch:
         driver: local

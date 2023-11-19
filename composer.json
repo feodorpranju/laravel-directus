@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "feodorpranju/laravel-directus",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "The skeleton application for the Laravel & directus with docker testing.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.8"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
